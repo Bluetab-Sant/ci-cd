@@ -1,4 +1,4 @@
-name: request-secrets
+name: cicd-project-repository
 
 on:
   repository_dispatch:
@@ -30,8 +30,4 @@ jobs:
 
       - name: Access cloned repository content
         run: |
-          # Get folder name 
-          IFS='/' read -a array <<< "$PROJECT_REPOSITORY"
-          # List files
-          cd "${array[1]}"
-          ls -la            
+          ls -la ci-cd
