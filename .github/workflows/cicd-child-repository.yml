@@ -8,29 +8,30 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      PROJECT_REPOSITORY: ${{ github.event.client_payload.repository }}
+      REPOSITORY_REF: ${{ github.event.client_payload.ref }}
+
     steps:
       - name: Extract repository and branch
         run: |
           # Get repository name from the payload
-          echo "Project repository name: $project_respository"
+          echo "Project repository name: $PROJECT_REPOSITORY"
 
           # Get ref name from the payload
-          echo "Branch name: $ref"
-        env:
-          project_respository: ${{ github.event.client_payload.repository }}
-          ref: ${{ github.event.client_payload.ref }}
+          echo "Branch name: $REPOSITORY_REF"
       
       - name: Clone project repository
         uses: actions/checkout@v4
         with:
-            repository: $project_respository
+            repository: ${{ env.PROJECT_REPOSITORY }}
             token: ${{ secrets.GH_PAT }}
-            ref: $ref
+            ref: ${{ env.REPOSITORY_REF }}
 
       - name: Access cloned repository content
         run: |
           # Get folder name 
-          IFS='/' read -a array <<< "$project_respository" 
+          IFS='/' read -a array <<< "$PROJECT_REPOSITORY"
           # List files
           cd "${array[1]}"
           ls -la            
