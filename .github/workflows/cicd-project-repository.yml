@@ -30,4 +30,5 @@ jobs:
 
       - name: Access cloned repository content
         run: |
-          ls -la ci-cd
+          cd /home/runner/work/ci-cd/ci-cd
+          ls -la
