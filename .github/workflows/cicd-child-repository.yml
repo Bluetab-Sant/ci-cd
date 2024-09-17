@@ -1,0 +1,35 @@
+name: request-secrets
+
+on:
+  repository_dispatch:
+    types: [trigger-workflow]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Extract repository and branch
+        run: |
+          # Parse repository name from the payload
+          project_respository=${{ github.event.client_payload.repository }}
+          echo "Project repository name: ${project_respository}"
+
+          # Parse branch name from the payload
+          branch=${{ github.event.client_payload.ref }}
+          echo "Branch name: ${branch}""
+      
+      - name: Clone project repository
+        uses: actions/checkout@v4
+        with:
+            repository: $project_respository
+            token: ${{ secrets.GH_PAT }}
+            ref: $ref
+
+      - name: Access cloned repository content
+        run: |
+          # Get folder name 
+          IFS='/' read -a array <<< "$project_respository" 
+          # List files
+          cd "${array[1]}"
+          ls -la            
