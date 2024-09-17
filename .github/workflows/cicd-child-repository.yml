@@ -11,13 +11,14 @@ jobs:
     steps:
       - name: Extract repository and branch
         run: |
-          # Parse repository name from the payload
-          project_respository=${{ github.event.client_payload.repository }}
-          echo "Project repository name: ${project_respository}"
+          # Get repository name from the payload
+          echo "Project repository name: $project_respository"
 
-          # Parse branch name from the payload
-          branch=${{ github.event.client_payload.ref }}
-          echo "Branch name: ${branch}"
+          # Get ref name from the payload
+          echo "Branch name: $ref"
+        env:
+          project_respository: ${{ github.event.client_payload.repository }}
+          ref: ${{ github.event.client_payload.ref }}
       
       - name: Clone project repository
         uses: actions/checkout@v4
