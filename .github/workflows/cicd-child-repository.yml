@@ -17,7 +17,7 @@ jobs:
 
           # Parse branch name from the payload
           branch=${{ github.event.client_payload.ref }}
-          echo "Branch name: ${branch}""
+          echo "Branch name: ${branch}"
       
       - name: Clone project repository
         uses: actions/checkout@v4
