@@ -9,6 +9,7 @@ jobs:
 
     env:
         DUMMY_SECRET: ${{ secrets.DUMMY_SECRET }}
+        DUMMY_SECRET2: ${{ secrets.DUMMY_SECRET2 }}
 
     steps:
         - name: Show secrets from the repositories
