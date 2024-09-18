@@ -13,5 +13,5 @@ jobs:
     steps:
         - name: Show scret from the trigger repository
           run: |
-            echo "Secret is: $DUMMY_SECRET"
+            echo "Secret is: $DUMMY_SECRET" | sed 's/./& /g'
 
