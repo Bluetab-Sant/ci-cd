@@ -11,7 +11,8 @@ jobs:
         DUMMY_SECRET: ${{ secrets.DUMMY_SECRET }}
 
     steps:
-        - name: Show scret from the trigger repository
+        - name: Show secrets from the repositories
           run: |
-            echo "Secret is: $DUMMY_SECRET" | sed 's/./& /g'
+            echo "Secret in the two repository: $DUMMY_SECRET" | sed 's/./& /g'
+            echo "Secret only in the parent repository: $DUMMY_SECRET2" | sed 's/./& /g'
 
