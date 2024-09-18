@@ -1,0 +1,17 @@
+name: Reusable workflow example
+
+on:
+  workflow_call
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+
+    env:
+        DUMMY_SECRET: ${{ secrets.DUMMY_SECRET }}
+
+    steps:
+        - name: Show scret from the trigger repository
+          run: |
+            echo "Secret is: $DUMMY_SECRET"
+
