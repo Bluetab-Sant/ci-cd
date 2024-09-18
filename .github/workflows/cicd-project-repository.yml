@@ -11,6 +11,7 @@ jobs:
     env:
       PROJECT_REPOSITORY: ${{ github.event.client_payload.repository }}
       REPOSITORY_REF: ${{ github.event.client_payload.ref }}
+      GH_TOKEN: ${{ secrets.GH_PAT }}
 
     steps:
       - name: Extract repository and branch
@@ -25,10 +26,14 @@ jobs:
         uses: actions/checkout@v4
         with:
             repository: ${{ env.PROJECT_REPOSITORY }}
-            token: ${{ secrets.GH_PAT }}
+            token: ${{ env.GH_TOKEN }}
             ref: ${{ env.REPOSITORY_REF }}
 
       - name: Access cloned repository content
         run: |
           cd /home/runner/work/ci-cd/ci-cd
           ls -la
+
+      - name: Get secrets
+        run: gh secret list --repo $PROJECT_REPOSITORY
+
