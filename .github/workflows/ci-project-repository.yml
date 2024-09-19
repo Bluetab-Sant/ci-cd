@@ -1,0 +1,53 @@
+name: CI Project Repository with CLI
+
+on:
+  workflow_dispatch:
+    inputs:
+      repository:
+        description: 'Repository name as: owner/repo'
+        required: true
+      ref:
+        description: 'Repository referece as: refs/heads/main'
+        required: true    
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      PROJECT_REPOSITORY: ${{ github.event.inputs.repository }}
+      REPOSITORY_REF: ${{ github.event.inputs.ref }}
+
+    steps:
+      - name: Extract repository and branch
+        run: |
+          # Get repository name from the payload
+          echo "Project repository name: $PROJECT_REPOSITORY"
+
+          # Get ref name from the payload
+          echo "Branch name: $REPOSITORY_REF"
+
+      - name: Generate a token
+        id: generate-token
+        uses: actions/create-github-app-token@v1
+        with:
+            app-id: ${{ vars.APP_ID }}
+            private-key: ${{ secrets.APP_PRIVATE_KEY }}           
+
+      - name: Clone project repository
+        uses: actions/checkout@v4
+        with:
+            repository: ${{ env.PROJECT_REPOSITORY }}
+            token: ${{ steps.generate-token.outputs.token }}
+            ref: ${{ env.REPOSITORY_REF }}
+
+      - name: Access cloned repository content
+        run: |
+          cd /home/runner/work/ci-cd/ci-cd
+          ls -la
+
+      - name: Get secrets
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}      
+        run: gh secret list --repo $PROJECT_REPOSITORY
+
