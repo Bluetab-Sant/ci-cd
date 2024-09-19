@@ -1,4 +1,4 @@
-name: CI Project Repository with CLI
+name: CD Project Repository manually
 
 on:
   workflow_dispatch:

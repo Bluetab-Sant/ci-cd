@@ -1,4 +1,4 @@
-name: cicd-project-repository
+name: cd-project-repository-request
 
 on:
   repository_dispatch:
