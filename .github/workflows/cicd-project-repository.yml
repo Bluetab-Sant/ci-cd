@@ -11,7 +11,6 @@ jobs:
     env:
       PROJECT_REPOSITORY: ${{ github.event.client_payload.repository }}
       REPOSITORY_REF: ${{ github.event.client_payload.ref }}
-      GH_TOKEN: ${{ secrets.GH_PAT }}
 
     steps:
       - name: Extract repository and branch
@@ -21,12 +20,19 @@ jobs:
 
           # Get ref name from the payload
           echo "Branch name: $REPOSITORY_REF"
-      
+
+      - name: Generate a token
+        id: generate-token
+        uses: actions/create-github-app-token@v1
+        with:
+            app-id: ${{ vars.APP_ID }}
+            private-key: ${{ secrets.APP_PRIVATE_KEY }}           
+
       - name: Clone project repository
         uses: actions/checkout@v4
         with:
             repository: ${{ env.PROJECT_REPOSITORY }}
-            token: ${{ env.GH_TOKEN }}
+            token: ${{ steps.generate-token.outputs.token }}
             ref: ${{ env.REPOSITORY_REF }}
 
       - name: Access cloned repository content
@@ -35,5 +41,7 @@ jobs:
           ls -la
 
       - name: Get secrets
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}      
         run: gh secret list --repo $PROJECT_REPOSITORY
 
